@@ -32,8 +32,9 @@ public class ImportController extends BaseController {
         ModelAndView modelAndView = super.view("xml/import-xml");
         boolean[] areImported = new boolean[]{
                 this.companyService.areImported(),
-        this.employeeService.areImported(),
-        this.projectService.areImported()};
+                this.projectService.areImported(),
+        this.employeeService.areImported()
+        };
         modelAndView.addObject("areImported", areImported);
         return modelAndView;
     }
@@ -48,6 +49,32 @@ public class ImportController extends BaseController {
     @PostMapping("/companies")
     public ModelAndView companiesConfirm() throws IOException, JAXBException {
         this.companyService.importCompanies();
+        return super.redirect("/import/xml");
+    }
+
+    @GetMapping("/projects")
+    public ModelAndView projects() throws IOException {
+        ModelAndView modelAndView = super.view("xml/import-projects");
+        modelAndView.addObject("projects", this.projectService.readProjectsXmlFile());
+        return modelAndView;
+    }
+
+    @PostMapping("/projects")
+    public ModelAndView projectsConfirm() throws IOException, JAXBException {
+        this.projectService.importProjects();
+        return super.redirect("/import/xml");
+    }
+
+    @GetMapping("/employees")
+    public ModelAndView employees() throws IOException {
+        ModelAndView modelAndView = super.view("xml/import-employees");
+        modelAndView.addObject("employees", this.employeeService.readEmployeesXmlFile());
+        return modelAndView;
+    }
+
+    @PostMapping("/employees")
+    public ModelAndView employeesConfirm() throws IOException, JAXBException {
+        this.employeeService.importEmployees();
         return super.redirect("/import/xml");
     }
 }
